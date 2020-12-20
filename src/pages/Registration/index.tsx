@@ -1,13 +1,10 @@
 import React, { FC } from 'react';
+import Signup from '../../components/Signup';
 
 import './styles.scss';
 
 const Registration: FC = () => {
-  return (
-    <div>
-      <h1>Registration Page</h1>
-    </div>
-  );
+  return <Signup />;
 };
 
 export default Registration;

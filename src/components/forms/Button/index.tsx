@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import './styles.scss';
 
-interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {}
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
-const Button: FC<ButtonProps> = ({ children, ...otherProps }) => {
+const Button: FC<ButtonProps> = ({ children, type, ...otherProps }) => {
   return (
-    <button type='button' className='btn' onClick={otherProps.onClick}>
+    <button type={type} className='btn' {...otherProps}>
       {children}
     </button>
   );

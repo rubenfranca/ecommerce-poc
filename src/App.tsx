@@ -12,6 +12,7 @@ import Login from './pages/Login';
 
 const App: FC = () => {
   const user = useContext(UserContext);
+  console.log(user);
 
   return (
     <div className='App'>
@@ -20,7 +21,6 @@ const App: FC = () => {
           exact
           path='/'
           render={() => (
-            // @ts-ignore
             <HomepageLayout user={user}>
               <Homepage />
             </HomepageLayout>
@@ -32,7 +32,6 @@ const App: FC = () => {
             user ? (
               <Redirect to='/' />
             ) : (
-              // @ts-ignore
               <MainLayout user={user}>
                 <Login />
               </MainLayout>
@@ -41,12 +40,15 @@ const App: FC = () => {
         />
         <Route
           path='/registration'
-          render={() => (
-            // @ts-ignore
-            <MainLayout user={user}>
-              <Registration />
-            </MainLayout>
-          )}
+          render={() =>
+            user ? (
+              <Redirect to='/' />
+            ) : (
+              <MainLayout user={user}>
+                <Registration />
+              </MainLayout>
+            )
+          }
         />
         <Redirect to='/' />
       </Switch>

@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import firebase from 'firebase';
+import { User } from '../types/User';
 
 interface HomepageLayoutProps {
-  user: firebase.User;
+  user: User | null;
 }
 
 const HomepageLayout: FC<HomepageLayoutProps> = ({ children, user }) => {

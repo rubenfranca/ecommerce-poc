@@ -60,3 +60,20 @@ export const handleUserProfile = async (userAuth, additionalData) => {
 
   return userRef;
 };
+
+export const registerUser = async (email, password, displayName) => {
+  try {
+    const { user } = await auth.createUserWithEmailAndPassword(email, password);
+    await handleUserProfile(user, { displayName });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const signInWithEmail = async (email, password) => {
+  try {
+    await auth.signInWithEmailAndPassword(email, password);
+  } catch (err) {
+    console.log(err);
+  }
+};
