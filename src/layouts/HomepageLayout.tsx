@@ -1,11 +1,16 @@
 import React, { FC } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import firebase from 'firebase';
 
-const HomepageLayout: FC = ({ children }) => {
+interface HomepageLayoutProps {
+  user: firebase.User;
+}
+
+const HomepageLayout: FC<HomepageLayoutProps> = ({ children, user }) => {
   return (
     <div className='fullHeight'>
-      <Header />
+      <Header user={user} />
       {children}
       <Footer />
     </div>
