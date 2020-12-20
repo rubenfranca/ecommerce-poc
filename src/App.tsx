@@ -1,9 +1,13 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Homepage from './pages/Homepage';
 import Registration from './pages/Registration';
 import './default.scss';
-import { UserContext } from './providers/UserProvider';
+import { onAuthStateChange } from './firebase/utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentUser } from './redux/User/User';
+import { getUser } from './redux/User/UserSelector';
+import { User } from './types/User';
 
 // Layout
 import MainLayout from './layouts/MainLayout';
@@ -12,8 +16,17 @@ import Login from './pages/Login';
 import Recovery from './pages/Recovery';
 
 const App: FC = () => {
-  const user = useContext(UserContext);
-  console.log(user);
+  const dispatch = useDispatch();
+  const user = useSelector(getUser);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChange((data: User) =>
+      dispatch(setCurrentUser(data)),
+    );
+    return () => {
+      unsubscribe();
+    };
+  }, [dispatch]);
 
   return (
     <div className='App'>
@@ -22,7 +35,7 @@ const App: FC = () => {
           exact
           path='/'
           render={() => (
-            <HomepageLayout user={user}>
+            <HomepageLayout>
               <Homepage />
             </HomepageLayout>
           )}
@@ -33,7 +46,7 @@ const App: FC = () => {
             user ? (
               <Redirect to='/' />
             ) : (
-              <MainLayout user={user}>
+              <MainLayout>
                 <Login />
               </MainLayout>
             )
@@ -45,7 +58,7 @@ const App: FC = () => {
             user ? (
               <Redirect to='/' />
             ) : (
-              <MainLayout user={user}>
+              <MainLayout>
                 <Registration />
               </MainLayout>
             )
@@ -54,7 +67,7 @@ const App: FC = () => {
         <Route
           path='/recovery'
           render={() => (
-            <MainLayout user={user}>
+            <MainLayout>
               <Recovery />
             </MainLayout>
           )}

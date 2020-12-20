@@ -3,14 +3,10 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { User } from '../types/User';
 
-interface HomepageLayoutProps {
-  user: User | null;
-}
-
-const HomepageLayout: FC<HomepageLayoutProps> = ({ children, user }) => {
+const HomepageLayout: FC = ({ children }) => {
   return (
     <div className='fullHeight'>
-      <Header user={user} />
+      <Header />
       {children}
       <Footer />
     </div>

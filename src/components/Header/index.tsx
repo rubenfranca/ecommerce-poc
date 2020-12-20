@@ -1,16 +1,15 @@
 import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
+import { getUser } from '../../redux/User/UserSelector';
 import './styles.scss';
 import { Link } from 'react-router-dom';
 import { auth } from '../../firebase/utils';
-import { User } from '../../types/User';
 
 import Logo from '../../assets/logo_transparent.png';
 
-interface HeaderProps {
-  user: User | null;
-}
+const Header: FC = () => {
+  const user = useSelector(getUser);
 
-const Header: FC<HeaderProps> = ({ user = null }) => {
   return (
     <header className='header'>
       <div className='wrap'>
