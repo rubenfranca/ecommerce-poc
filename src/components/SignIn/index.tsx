@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { signInWithGoogle, signInWithEmail } from '../../firebase/utils';
 import AuthWrapper from '../../components/AuthWrapper';
 import FormInput from '../../components/forms/FormInput';
@@ -8,6 +8,7 @@ import Button from '../../components/forms/Button';
 import './styles.scss';
 
 const SignIn: FC = () => {
+  const history = useHistory();
   const [formState, setFormState] = useState({ email: '', password: '' });
   const [formErrors, setFormErrors] = useState([] as string[]);
   const { email, password } = formState;
@@ -22,6 +23,7 @@ const SignIn: FC = () => {
 
     await signInWithEmail(email, password);
     setFormState({ email: '', password: '' });
+    history.push('/');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

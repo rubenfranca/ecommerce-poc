@@ -8,11 +8,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from './redux/User/User';
 import { getUser } from './redux/User/UserSelector';
 import { User } from './types/User';
+import WithAuth from './hoc/withAuth';
 
 // Layout
 import MainLayout from './layouts/MainLayout';
 import HomepageLayout from './layouts/HomepageLayout';
 import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
 import Recovery from './pages/Recovery';
 
 const App: FC = () => {
@@ -70,6 +72,16 @@ const App: FC = () => {
             <MainLayout>
               <Recovery />
             </MainLayout>
+          )}
+        />
+        <Route
+          path='/dashboard'
+          render={() => (
+            <WithAuth>
+              <MainLayout>
+                <Dashboard />
+              </MainLayout>
+            </WithAuth>
           )}
         />
         <Redirect to='/' />

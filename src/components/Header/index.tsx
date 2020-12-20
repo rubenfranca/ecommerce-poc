@@ -22,6 +22,9 @@ const Header: FC = () => {
           {user && (
             <ul>
               <li>
+                <Link to='/dashboard'>My account</Link>
+              </li>
+              <li>
                 <span onClick={() => auth.signOut()}>Logout</span>
               </li>
             </ul>
