@@ -9,6 +9,7 @@ import { UserContext } from './providers/UserProvider';
 import MainLayout from './layouts/MainLayout';
 import HomepageLayout from './layouts/HomepageLayout';
 import Login from './pages/Login';
+import Recovery from './pages/Recovery';
 
 const App: FC = () => {
   const user = useContext(UserContext);
@@ -49,6 +50,14 @@ const App: FC = () => {
               </MainLayout>
             )
           }
+        />
+        <Route
+          path='/recovery'
+          render={() => (
+            <MainLayout user={user}>
+              <Recovery />
+            </MainLayout>
+          )}
         />
         <Redirect to='/' />
       </Switch>

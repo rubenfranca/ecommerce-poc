@@ -77,3 +77,15 @@ export const signInWithEmail = async (email, password) => {
     console.log(err);
   }
 };
+
+export const sendEmail = async (email, successCallback, errorCallback) => {
+  try {
+    await auth.sendPasswordResetEmail(email, {
+      url: 'http://localhost:3000/login',
+    });
+
+    successCallback();
+  } catch (err) {
+    errorCallback();
+  }
+};
