@@ -1,11 +1,13 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import './styles.scss';
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { registerUser } from '../../firebase/utils';
+import { signUpUser, resetAuthForms } from '../../redux/User/User';
 import FormInput from '../forms/FormInput';
 import Button from '../forms/Button';
 import AuthWrapper from '../AuthWrapper';
+import { getSignUpSuccess } from '../../redux/User/UserSelector';
 
 const initialFormState = {
   displayName: '',
@@ -15,7 +17,9 @@ const initialFormState = {
 };
 
 const Signup: FC = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
+  const signUpSuccess = useSelector(getSignUpSuccess);
   const [formState, setFormState] = useState(initialFormState);
   const [formError, setFormError] = useState([] as string[]);
 
@@ -45,13 +49,16 @@ const Signup: FC = () => {
       return;
     }
 
-    try {
-      await registerUser(email, password, displayName);
-
-      setFormState(initialFormState);
-      history.push('/');
-    } catch (err) {}
+    dispatch(signUpUser(displayName, email, password));
   };
+
+  useEffect(() => {
+    if (signUpSuccess) {
+      setFormState(initialFormState);
+      dispatch(resetAuthForms());
+      history.push('/');
+    }
+  }, [signUpSuccess, history, dispatch]);
 
   const configAuthWrapper = {
     headline: 'Registration',

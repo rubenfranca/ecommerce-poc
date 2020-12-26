@@ -8,9 +8,8 @@ firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-const GoogleProvider = new firebase.auth.GoogleAuthProvider();
+export const GoogleProvider = new firebase.auth.GoogleAuthProvider();
 GoogleProvider.setCustomParameters({ propt: 'select_acount ' });
-export const signInWithGoogle = () => auth.signInWithPopup(GoogleProvider);
 
 export const onAuthStateChange = (callback) =>
   firebase.auth().onAuthStateChanged(async (user) => {
@@ -59,33 +58,4 @@ export const handleUserProfile = async (userAuth, additionalData) => {
   }
 
   return userRef;
-};
-
-export const registerUser = async (email, password, displayName) => {
-  try {
-    const { user } = await auth.createUserWithEmailAndPassword(email, password);
-    await handleUserProfile(user, { displayName });
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-export const signInWithEmail = async (email, password) => {
-  try {
-    await auth.signInWithEmailAndPassword(email, password);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const sendEmail = async (email, successCallback, errorCallback) => {
-  try {
-    await auth.sendPasswordResetEmail(email, {
-      url: 'http://localhost:3000/login',
-    });
-
-    successCallback();
-  } catch (err) {
-    errorCallback();
-  }
 };

@@ -1,13 +1,21 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import './styles.scss';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { resetPassword, resetAuthForms } from '../../redux/User/User';
+import {
+  getResetPasswordSuccess,
+  getResetPasswordErrors,
+} from '../../redux/User/UserSelector';
 import AuthWrapper from '../AuthWrapper';
 import FormInput from '../forms/FormInput';
 import Button from '../forms/Button';
-import { sendEmail } from '../../firebase/utils';
 
 const EmailPassword: FC = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
+  const resetPasswordErrors = useSelector(getResetPasswordErrors);
+  const resetPasswordSuccess = useSelector(getResetPasswordSuccess);
   const [formState, setFormState] = useState({ email: '' });
   const [formErrors, setFormErrors] = useState([] as string[]);
 
@@ -21,7 +29,7 @@ const EmailPassword: FC = () => {
     setFormState((oldState) => ({ ...oldState, [name]: value }));
   };
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (email === '') {
@@ -29,12 +37,19 @@ const EmailPassword: FC = () => {
       return;
     }
 
-    await sendEmail(
-      email,
-      () => history.push('/login'),
-      () => setFormErrors(['Email not found, please try again']),
-    );
+    dispatch(resetPassword(email));
   };
+
+  useEffect(() => {
+    if (resetPasswordSuccess) {
+      dispatch(resetAuthForms());
+      history.push('/login');
+    }
+  }, [resetPasswordSuccess, history, dispatch]);
+
+  useEffect(() => {
+    setFormErrors((errors) => [...errors, ...resetPasswordErrors]);
+  }, [resetPasswordErrors]);
 
   const { email } = formState;
 

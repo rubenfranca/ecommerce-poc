@@ -1,6 +1,12 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { signInWithGoogle, signInWithEmail } from '../../firebase/utils';
+import {
+  signInUser,
+  signInWithGoogle,
+  resetAuthForms,
+} from '../../redux/User/User';
+import { getSignInSuccess } from '../../redux/User/UserSelector';
 import AuthWrapper from '../../components/AuthWrapper';
 import FormInput from '../../components/forms/FormInput';
 import Button from '../../components/forms/Button';
@@ -8,12 +14,14 @@ import Button from '../../components/forms/Button';
 import './styles.scss';
 
 const SignIn: FC = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
   const [formState, setFormState] = useState({ email: '', password: '' });
   const [formErrors, setFormErrors] = useState([] as string[]);
+  const signInSuccess = useSelector(getSignInSuccess);
   const { email, password } = formState;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (email === '' || password === '') {
@@ -21,9 +29,7 @@ const SignIn: FC = () => {
       return;
     }
 
-    await signInWithEmail(email, password);
-    setFormState({ email: '', password: '' });
-    history.push('/');
+    dispatch(signInUser(email, password));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +41,14 @@ const SignIn: FC = () => {
   const configAuthWrapper = {
     headline: 'Login',
   };
+
+  useEffect(() => {
+    if (signInSuccess) {
+      setFormState({ email: '', password: '' });
+      dispatch(resetAuthForms());
+      history.push('/');
+    }
+  }, [signInSuccess, history, dispatch]);
 
   return (
     <AuthWrapper {...configAuthWrapper}>
@@ -66,7 +80,9 @@ const SignIn: FC = () => {
 
           <div className='socialSignin'>
             <div className='row'>
-              <Button onClick={signInWithGoogle}>Sign in with Google</Button>
+              <Button onClick={() => dispatch(signInWithGoogle())}>
+                Sign in with Google
+              </Button>
             </div>
           </div>
 
