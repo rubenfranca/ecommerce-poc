@@ -47,6 +47,9 @@ const userSlice = createSlice({
       state.signInSuccess = initialState.signInSuccess;
       state.signUpSuccess = initialState.signUpSuccess;
     },
+    logout: (state) => {
+      state = initialState;
+    },
   },
 });
 
@@ -58,6 +61,7 @@ export const {
   resetPasswordSuccess,
   resetPasswordError,
   resetAuthForms,
+  logout,
 } = userSlice.actions;
 
 export const signInUser = (email: string, password: string): AppThunk => async (
@@ -106,6 +110,16 @@ export const signInWithGoogle = () => async (dispatch: AppDispatch) => {
     await auth.signInWithPopup(GoogleProvider);
 
     dispatch(signInSuccess(true));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const signOutUser = () => async (dispatch: AppDispatch) => {
+  try {
+    await auth.signOut();
+
+    dispatch(logout());
   } catch (err) {
     console.log(err);
   }

@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { signOutUser } from '../../redux/User/User';
 import { getUser } from '../../redux/User/UserSelector';
 import './styles.scss';
 import { Link } from 'react-router-dom';
@@ -8,6 +9,7 @@ import { auth } from '../../firebase/utils';
 import Logo from '../../assets/logo_transparent.png';
 
 const Header: FC = () => {
+  const dispatch = useDispatch();
   const user = useSelector(getUser);
 
   return (
@@ -25,7 +27,7 @@ const Header: FC = () => {
                 <Link to='/dashboard'>My account</Link>
               </li>
               <li>
-                <span onClick={() => auth.signOut()}>Logout</span>
+                <span onClick={() => dispatch(signOutUser())}>Logout</span>
               </li>
             </ul>
           )}

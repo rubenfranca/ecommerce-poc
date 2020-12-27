@@ -2,6 +2,10 @@ import React, { FC, useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Homepage from './pages/Homepage';
 import Registration from './pages/Registration';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Recovery from './pages/Recovery';
+import Admin from './pages/Admin';
 import './default.scss';
 import { onAuthStateChange } from './firebase/utils';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,10 +23,7 @@ import AdminToolbar from './components/AdminToolbar';
 // Layout
 import MainLayout from './layouts/MainLayout';
 import HomepageLayout from './layouts/HomepageLayout';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import Recovery from './pages/Recovery';
-import Admin from './pages/Admin';
+import AdminLayout from './layouts/AdminLayout';
 
 const App: FC = () => {
   const dispatch = useDispatch();
@@ -86,9 +87,9 @@ const App: FC = () => {
           path='/admin'
           render={() => (
             <WithAdminAuth>
-              <MainLayout>
+              <AdminLayout>
                 <Admin />
-              </MainLayout>
+              </AdminLayout>
             </WithAdminAuth>
           )}
         />

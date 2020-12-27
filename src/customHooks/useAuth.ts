@@ -8,7 +8,6 @@ const useAuth = () => {
   const user = useSelector(getUser);
 
   useEffect(() => {
-    console.log(user);
     if (!user) {
       history.push('/login');
     }
