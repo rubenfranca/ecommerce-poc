@@ -8,7 +8,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from './redux/User/User';
 import { getUser } from './redux/User/UserSelector';
 import { User } from './types/User';
+
+// hocs
 import WithAuth from './hoc/withAuth';
+import WithAdminAuth from './hoc/withAdminAuth';
+
+// components
+import AdminToolbar from './components/AdminToolbar';
 
 // Layout
 import MainLayout from './layouts/MainLayout';
@@ -16,6 +22,7 @@ import HomepageLayout from './layouts/HomepageLayout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Recovery from './pages/Recovery';
+import Admin from './pages/Admin';
 
 const App: FC = () => {
   const dispatch = useDispatch();
@@ -32,6 +39,7 @@ const App: FC = () => {
 
   return (
     <div className='App'>
+      <AdminToolbar />
       <Switch>
         <Route
           exact
@@ -72,6 +80,16 @@ const App: FC = () => {
             <MainLayout>
               <Recovery />
             </MainLayout>
+          )}
+        />
+        <Route
+          path='/admin'
+          render={() => (
+            <WithAdminAuth>
+              <MainLayout>
+                <Admin />
+              </MainLayout>
+            </WithAdminAuth>
           )}
         />
         <Route

@@ -1,3 +1,4 @@
+type UserRoles = 'user' | 'admin';
 export interface User {
   id: string;
   displayName: string;
@@ -6,4 +7,5 @@ export interface User {
     nanoseconds: number;
     seconds: number;
   };
+  userRoles: UserRoles[];
 }
