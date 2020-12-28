@@ -9,7 +9,20 @@ const store = configureStore({
   middleware: [
     logger,
     ...getDefaultMiddleware({
-      serializableCheck: { ignoredActions: ['user/setCurrentUser'] },
+      serializableCheck: {
+        ignoredActions: [
+          'user/setCurrentUser',
+          'products/fetchProducts/fulfilled',
+          'products/fetchProducts/pending',
+          'products/delete/fulfilled',
+          'products/delete/pending',
+        ],
+        ignoredActionPaths: [
+          'user.currentUser.createdAt',
+          'user.currentUser.createdAt.seconds',
+          'user.currentUser.createdAt.nanoseconds',
+        ],
+      },
     }),
   ],
   devTools: process.env.NODE_ENV === 'development',

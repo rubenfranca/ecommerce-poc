@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import {
-//   addProductStart,
-//   fetchProductsStart,
-//   deleteProductStart,
-// } from './../../redux/Products/products.actions';
+import {
+  addProduct,
+  fetchProducts,
+  deleteProduct,
+} from '../../redux/Products/Products';
+import { getProducts } from '../../redux/Products/ProductsSelector';
 import Modal from './../../components/Modal';
 import FormInput from './../../components/forms/FormInput';
 import FormSelect from './../../components/forms/FormSelect';
@@ -13,15 +14,12 @@ import LoadMore from './../../components/LoadMore';
 import CKEditor from 'ckeditor4-react';
 import './styles.scss';
 
-// const mapState = ({ productsData }) => ({
-//   products: productsData.products,
-// });
-
 const Admin = () => {
   const { products } = {
     products: { data: [], queryDoc: '', isLastPage: false },
   };
   const dispatch = useDispatch();
+  const productsData = useSelector(getProducts);
   const [hideModal, setHideModal] = useState(true);
   const [productCategory, setProductCategory] = useState('mens');
   const [productName, setProductName] = useState('');
@@ -31,9 +29,9 @@ const Admin = () => {
 
   const { data, queryDoc, isLastPage } = products;
 
-  // useEffect(() => {
-  //   dispatch(fetchProductsStart());
-  // }, []);
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
   const toggleModal = () => setHideModal(!hideModal);
 
@@ -54,15 +52,14 @@ const Admin = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // dispatch(
-    //   addProductStart({
-    //     productCategory,
-    //     productName,
-    //     productThumbnail,
-    //     productPrice,
-    //     productDesc,
-    //   }),
-    // );
+    dispatch(
+      addProduct({
+        productCategory,
+        productName,
+        productThumbnail,
+        productPrice,
+      }),
+    );
     resetForm();
   };
 
@@ -170,9 +167,9 @@ const Admin = () => {
                   cellSpacing='0'
                 >
                   <tbody>
-                    {Array.isArray(data) &&
-                      data.length > 0 &&
-                      data.map((product, index) => {
+                    {Array.isArray(productsData) &&
+                      productsData.length > 0 &&
+                      productsData.map((product, index) => {
                         const {
                           productName,
                           productThumbnail,
@@ -181,17 +178,21 @@ const Admin = () => {
                         } = product;
 
                         return (
-                          <tr key={index}>
+                          <tr key={documentID}>
                             <td>
-                              <img className='thumb' src={productThumbnail} />
+                              <img
+                                className='thumb'
+                                src={productThumbnail}
+                                alt='Product thumbnail'
+                              />
                             </td>
                             <td>{productName}</td>
                             <td>£{productPrice}</td>
                             <td>
                               <Button
-                              // onClick={() =>
-                              //   dispatch(deleteProductStart(documentID))
-                              // }
+                                onClick={() =>
+                                  dispatch(deleteProduct(documentID))
+                                }
                               >
                                 Delete
                               </Button>
